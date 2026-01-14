@@ -1,16 +1,14 @@
-import { Text, View } from "react-native";
-import Model from "@/components/Model"
+import LayoutScene from "@/components/Model";
+import { View } from "react-native";
 
 export default function Index() {
   return (
     <View
       style={{
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
       }}
     >
-      <Model />
+      <LayoutScene />
     </View>
   );
 }
