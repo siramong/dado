@@ -7,4 +7,10 @@ module.exports = defineConfig([
   {
     ignores: ['dist/*'],
   },
+  {
+    files: ['components/**/*.tsx', 'components/**/*.ts'],
+    rules: {
+      'react/no-unknown-property': 'off',
+    },
+  },
 ]);
