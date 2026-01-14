@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Accelerometer } from 'expo-sensors';
+import { Accelerometer, AccelerometerMeasurement } from 'expo-sensors';
+import type { Subscription } from 'expo-modules-core';
 
 interface ShakeDetectionOptions {
   threshold?: number;
@@ -14,13 +15,13 @@ export const useShakeDetection = (
   const [lastShake, setLastShake] = useState<number>(0);
 
   useEffect(() => {
-    let subscription: any;
+    let subscription: Subscription | undefined;
 
     const startListening = async () => {
       try {
         await Accelerometer.setUpdateInterval(100);
         
-        subscription = Accelerometer.addListener((accelerometerData) => {
+        subscription = Accelerometer.addListener((accelerometerData: AccelerometerMeasurement) => {
           const { x, y, z } = accelerometerData;
           const acceleration = Math.sqrt(x * x + y * y + z * z);
           

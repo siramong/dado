@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
@@ -11,6 +11,16 @@ export default function Index() {
   const [diceValue, setDiceValue] = useState(1);
   const [showResult, setShowResult] = useState(false);
   const scaleAnim = useMemo(() => new Animated.Value(1), []);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    // Limpiar timeout al desmontar
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   const rollDice = useCallback(() => {
     if (isRolling) return;
@@ -38,8 +48,13 @@ export default function Index() {
       }),
     ]).start();
 
+    // Limpiar timeout anterior si existe
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
     // Después de 2 segundos, mostrar el resultado
-    setTimeout(() => {
+    timeoutRef.current = setTimeout(() => {
       setDiceValue(newValue);
       setIsRolling(false);
       setShowResult(true);

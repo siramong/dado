@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useMemo } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
@@ -10,9 +10,51 @@ interface DiceProps {
 
 const DiceMesh: React.FC<DiceProps> = ({ isRolling, finalValue }) => {
   const meshRef = useRef<THREE.Mesh>(null);
+  const materialsRef = useRef<THREE.MeshStandardMaterial[]>([]);
   const rotationSpeed = useRef({ x: 0, y: 0, z: 0 });
   const targetRotation = useRef({ x: 0, y: 0, z: 0 });
   const rollingTime = useRef(0);
+
+  // Crear materiales una sola vez y limpiarlos al desmontar
+  useEffect(() => {
+    materialsRef.current = [
+      new THREE.MeshStandardMaterial({ 
+        color: '#667eea',
+        metalness: 0.3,
+        roughness: 0.4,
+      }),
+      new THREE.MeshStandardMaterial({ 
+        color: '#764ba2',
+        metalness: 0.3,
+        roughness: 0.4,
+      }),
+      new THREE.MeshStandardMaterial({ 
+        color: '#f093fb',
+        metalness: 0.3,
+        roughness: 0.4,
+      }),
+      new THREE.MeshStandardMaterial({ 
+        color: '#4facfe',
+        metalness: 0.3,
+        roughness: 0.4,
+      }),
+      new THREE.MeshStandardMaterial({ 
+        color: '#00f2fe',
+        metalness: 0.3,
+        roughness: 0.4,
+      }),
+      new THREE.MeshStandardMaterial({ 
+        color: '#43e97b',
+        metalness: 0.3,
+        roughness: 0.4,
+      }),
+    ];
+
+    return () => {
+      // Limpiar materiales al desmontar
+      materialsRef.current.forEach(material => material.dispose());
+    };
+  }, []);
 
   useEffect(() => {
     if (isRolling) {
@@ -47,7 +89,7 @@ const DiceMesh: React.FC<DiceProps> = ({ isRolling, finalValue }) => {
       rotationSpeed.current.x *= decelerationFactor;
       rotationSpeed.current.y *= decelerationFactor;
       rotationSpeed.current.z *= decelerationFactor;
-    } else if (rollingTime.current <= 0 && isRolling) {
+    } else if (rollingTime.current <= 0) {
       // Interpolación suave hacia la rotación final
       meshRef.current.rotation.x += (targetRotation.current.x - meshRef.current.rotation.x) * 0.1;
       meshRef.current.rotation.y += (targetRotation.current.y - meshRef.current.rotation.y) * 0.1;
@@ -68,42 +110,8 @@ const DiceMesh: React.FC<DiceProps> = ({ isRolling, finalValue }) => {
     }
   };
 
-  // Crear materiales con colores degradados para cada cara
-  const materials = useMemo(() => [
-    new THREE.MeshStandardMaterial({ 
-      color: '#667eea',
-      metalness: 0.3,
-      roughness: 0.4,
-    }),
-    new THREE.MeshStandardMaterial({ 
-      color: '#764ba2',
-      metalness: 0.3,
-      roughness: 0.4,
-    }),
-    new THREE.MeshStandardMaterial({ 
-      color: '#f093fb',
-      metalness: 0.3,
-      roughness: 0.4,
-    }),
-    new THREE.MeshStandardMaterial({ 
-      color: '#4facfe',
-      metalness: 0.3,
-      roughness: 0.4,
-    }),
-    new THREE.MeshStandardMaterial({ 
-      color: '#00f2fe',
-      metalness: 0.3,
-      roughness: 0.4,
-    }),
-    new THREE.MeshStandardMaterial({ 
-      color: '#43e97b',
-      metalness: 0.3,
-      roughness: 0.4,
-    }),
-  ], []);
-
   return (
-    <mesh ref={meshRef} material={materials}>
+    <mesh ref={meshRef} material={materialsRef.current}>
       <boxGeometry args={[2.5, 2.5, 2.5]} />
     </mesh>
   );
