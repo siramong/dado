@@ -15,38 +15,50 @@ const DiceMesh: React.FC<DiceProps> = ({ isRolling, finalValue }) => {
   const targetRotation = useRef({ x: 0, y: 0, z: 0 });
   const rollingTime = useRef(0);
 
-  // Crear materiales una sola vez y limpiarlos al desmontar
+  // Crear materiales modernos con colores vibrantes
   useEffect(() => {
     materialsRef.current = [
       new THREE.MeshStandardMaterial({ 
-        color: '#667eea',
-        metalness: 0.3,
-        roughness: 0.4,
+        color: '#ff6b6b',
+        metalness: 0.5,
+        roughness: 0.3,
+        emissive: '#ff6b6b',
+        emissiveIntensity: 0.2,
       }),
       new THREE.MeshStandardMaterial({ 
-        color: '#764ba2',
-        metalness: 0.3,
-        roughness: 0.4,
+        color: '#ee5a6f',
+        metalness: 0.5,
+        roughness: 0.3,
+        emissive: '#ee5a6f',
+        emissiveIntensity: 0.2,
       }),
       new THREE.MeshStandardMaterial({ 
-        color: '#f093fb',
-        metalness: 0.3,
-        roughness: 0.4,
+        color: '#c44569',
+        metalness: 0.5,
+        roughness: 0.3,
+        emissive: '#c44569',
+        emissiveIntensity: 0.2,
       }),
       new THREE.MeshStandardMaterial({ 
-        color: '#4facfe',
-        metalness: 0.3,
-        roughness: 0.4,
+        color: '#f8b500',
+        metalness: 0.5,
+        roughness: 0.3,
+        emissive: '#f8b500',
+        emissiveIntensity: 0.2,
       }),
       new THREE.MeshStandardMaterial({ 
-        color: '#00f2fe',
-        metalness: 0.3,
-        roughness: 0.4,
+        color: '#4ecdc4',
+        metalness: 0.5,
+        roughness: 0.3,
+        emissive: '#4ecdc4',
+        emissiveIntensity: 0.2,
       }),
       new THREE.MeshStandardMaterial({ 
-        color: '#43e97b',
-        metalness: 0.3,
-        roughness: 0.4,
+        color: '#95e1d3',
+        metalness: 0.5,
+        roughness: 0.3,
+        emissive: '#95e1d3',
+        emissiveIntensity: 0.2,
       }),
     ];
 
@@ -58,15 +70,14 @@ const DiceMesh: React.FC<DiceProps> = ({ isRolling, finalValue }) => {
 
   useEffect(() => {
     if (isRolling) {
-      // Velocidad de rotación aleatoria cuando se lanza
+      // Velocidad de rotación más dramática
       rotationSpeed.current = {
-        x: (Math.random() - 0.5) * 0.5,
-        y: (Math.random() - 0.5) * 0.5,
-        z: (Math.random() - 0.5) * 0.5,
+        x: (Math.random() - 0.5) * 0.6,
+        y: (Math.random() - 0.5) * 0.6,
+        z: (Math.random() - 0.5) * 0.6,
       };
-      rollingTime.current = 2; // 2 segundos de rotación
+      rollingTime.current = 2;
       
-      // Calcular rotación final basada en el valor
       const rotations = getFinalRotation(finalValue);
       targetRotation.current = rotations;
     }
@@ -76,29 +87,32 @@ const DiceMesh: React.FC<DiceProps> = ({ isRolling, finalValue }) => {
     if (!meshRef.current) return;
 
     if (isRolling && rollingTime.current > 0) {
-      // Rotación mientras se está lanzando
+      // Rotación dramática mientras se está lanzando
       meshRef.current.rotation.x += rotationSpeed.current.x;
       meshRef.current.rotation.y += rotationSpeed.current.y;
       meshRef.current.rotation.z += rotationSpeed.current.z;
       
-      // Reducir el tiempo de rotación
       rollingTime.current -= delta;
       
-      // Desacelerar gradualmente
+      // Desacelerar con efecto más suave
       const decelerationFactor = Math.max(0, rollingTime.current / 2);
-      rotationSpeed.current.x *= decelerationFactor;
-      rotationSpeed.current.y *= decelerationFactor;
-      rotationSpeed.current.z *= decelerationFactor;
+      rotationSpeed.current.x *= (0.95 + decelerationFactor * 0.05);
+      rotationSpeed.current.y *= (0.95 + decelerationFactor * 0.05);
+      rotationSpeed.current.z *= (0.95 + decelerationFactor * 0.05);
     } else if (rollingTime.current <= 0) {
       // Interpolación suave hacia la rotación final
       meshRef.current.rotation.x += (targetRotation.current.x - meshRef.current.rotation.x) * 0.1;
       meshRef.current.rotation.y += (targetRotation.current.y - meshRef.current.rotation.y) * 0.1;
       meshRef.current.rotation.z += (targetRotation.current.z - meshRef.current.rotation.z) * 0.1;
     }
+
+    // Rotación suave constante cuando no está rodando
+    if (!isRolling && rollingTime.current <= 0) {
+      meshRef.current.rotation.y += 0.005;
+    }
   });
 
   const getFinalRotation = (value: number): { x: number; y: number; z: number } => {
-    // Rotaciones para mostrar cada cara del dado
     switch (value) {
       case 1: return { x: 0, y: 0, z: 0 };
       case 2: return { x: 0, y: Math.PI / 2, z: 0 };
@@ -111,7 +125,7 @@ const DiceMesh: React.FC<DiceProps> = ({ isRolling, finalValue }) => {
   };
 
   return (
-    <mesh ref={meshRef} material={materialsRef.current}>
+    <mesh ref={meshRef} material={materialsRef.current} castShadow receiveShadow>
       <boxGeometry args={[2.5, 2.5, 2.5]} />
     </mesh>
   );
@@ -122,12 +136,21 @@ export const DiceScene: React.FC<DiceProps> = ({ isRolling, finalValue }) => {
     <View style={styles.container}>
       <Canvas
         camera={{ position: [0, 0, 8], fov: 50 }}
-        gl={{ antialias: true }}
+        gl={{ antialias: true, alpha: true }}
+        shadows
       >
-        <ambientLight intensity={0.6} />
-        <pointLight position={[10, 10, 10]} intensity={1.2} color="#ffffff" />
-        <pointLight position={[-10, -10, -10]} intensity={0.6} color="#667eea" />
-        <spotLight position={[0, 10, 0]} intensity={0.8} angle={0.3} penumbra={1} />
+        {/* Iluminación moderna y dramática */}
+        <ambientLight intensity={0.4} />
+        <pointLight position={[10, 10, 10]} intensity={1.5} color="#ff6b6b" castShadow />
+        <pointLight position={[-10, -10, -10]} intensity={0.8} color="#4ecdc4" />
+        <spotLight 
+          position={[0, 15, 0]} 
+          intensity={1.2} 
+          angle={0.4} 
+          penumbra={1} 
+          color="#ffffff"
+          castShadow 
+        />
         <DiceMesh isRolling={isRolling} finalValue={finalValue} />
       </Canvas>
     </View>
