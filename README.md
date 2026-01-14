@@ -1,53 +1,112 @@
-> Edited for use in IDX on 07/09/12
+# 🎲 Dado - Dice Rolling App
 
-# Welcome to your Expo app 👋
+Una aplicación moderna de React Native con Expo que simula el lanzamiento de un dado usando React Three Fiber. El dado se puede lanzar tocando un botón o sacudiendo el teléfono usando el acelerómetro.
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## ✨ Características
 
-## Get started
+- **Dado 3D interactivo** usando React Three Fiber
+- **Detección de sacudida** mediante acelerómetro
+- **Animaciones fluidas** con física realista
+- **Diseño moderno** con degradados y efectos visuales llamativos
+- **Feedback háptico** para mejor experiencia de usuario
+- **Responsive** y optimizado para dispositivos móviles
 
-#### Android
+## 🚀 Inicio Rápido
 
-Android previews are defined as a `workspace.onStart` hook and started as a vscode task when the workspace is opened/started.
+### Prerrequisitos
 
-Note, if you can't find the task, either:
-- Rebuild the environment (using command palette: `IDX: Rebuild Environment`), or
-- Run `npm run android -- --tunnel` command manually run android and see the output in your terminal. The device should pick up this new command and switch to start displaying the output from it.
+- Node.js (v16 o superior)
+- npm o yarn
+- Expo CLI
+- Dispositivo móvil con Expo Go o emulador Android/iOS
 
-In the output of this command/task, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You'll also find options to open the app's developer menu, reload the app, and more.
-
-#### Web
-
-Web previews will be started and managred automatically. Use the toolbar to manually refresh.
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+### Instalación
 
 ```bash
-npm run reset-project
+# Instalar dependencias
+npm install
+
+# Iniciar el servidor de desarrollo
+npm start
+
+# Para Android
+npm run android
+
+# Para iOS
+npm run ios
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## 📱 Uso
 
-## Learn more
+1. **Lanzar dado con botón**: Toca el botón "🎯 Lanzar Dado" en la parte inferior
+2. **Lanzar dado sacudiendo**: Agita tu teléfono para lanzar el dado automáticamente
+3. **Ver resultado**: El valor del dado se mostrará después de la animación
 
-To learn more about developing your project with Expo, look at the following resources:
+## 🏗️ Estructura del Proyecto
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```
+dado/
+├── app/                    # Pantallas de la aplicación
+│   ├── index.tsx          # Pantalla principal
+│   └── _layout.tsx        # Layout de navegación
+├── components/            # Componentes reutilizables
+│   └── DiceScene.tsx     # Componente del dado 3D
+├── hooks/                # Hooks personalizados
+│   └── useShakeDetection.ts  # Hook para detectar sacudidas
+├── models/               # Modelos 3D (si se agregan)
+└── utils/                # Funciones auxiliares
+```
 
-## Join the community
+## 🛠️ Tecnologías
 
-Join our community of developers creating universal apps.
+- **React Native** - Framework móvil
+- **Expo** - Plataforma de desarrollo
+- **React Three Fiber** - Renderizado 3D
+- **Three.js** - Biblioteca 3D
+- **Expo Sensors** - Acelerómetro y giroscopio
+- **Expo Haptics** - Feedback háptico
+- **Expo Linear Gradient** - Degradados modernos
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## 🎨 Diseño
+
+La aplicación utiliza un diseño moderno con:
+- Fondo degradado oscuro (modo oscuro por defecto)
+- Colores vibrantes para el dado (#667eea, #764ba2, etc.)
+- Animaciones suaves y transiciones
+- Tipografía bold y clara
+- Efectos de sombra y profundidad
+
+## 📝 Linting y Formato
+
+```bash
+# Ejecutar linter
+npm run lint
+```
+
+## 🤝 Contribución
+
+Las contribuciones son bienvenidas. Por favor, sigue el formato de commits:
+
+```
+EMOJI_AQUI tipo(archivo): Descripción
+```
+
+Ejemplos:
+- `✨ feat(app): Nueva característica`
+- `🐛 fix(components): Corrección de bug`
+- `🎨 style(app): Mejoras de diseño`
+- `📝 docs(README): Actualización de documentación`
+
+## 📄 Licencia
+
+Este proyecto es de código abierto y está disponible bajo la licencia MIT.
+
+## 👨‍💻 Desarrollo
+
+Editado para uso en IDX el 07/09/12
+
+Para más información sobre desarrollo con Expo:
+- [Documentación de Expo](https://docs.expo.dev/)
+- [Tutorial de Expo](https://docs.expo.dev/tutorial/introduction/)
+- [React Three Fiber](https://docs.pmnd.rs/react-three-fiber/)
+

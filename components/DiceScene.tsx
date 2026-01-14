@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useMemo } from 'react';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -111,7 +111,7 @@ const DiceMesh: React.FC<DiceProps> = ({ isRolling, finalValue }) => {
 
 export const DiceScene: React.FC<DiceProps> = ({ isRolling, finalValue }) => {
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
       <Canvas
         camera={{ position: [0, 0, 8], fov: 50 }}
         gl={{ antialias: true }}
@@ -125,3 +125,9 @@ export const DiceScene: React.FC<DiceProps> = ({ isRolling, finalValue }) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
